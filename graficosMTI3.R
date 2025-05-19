@@ -99,11 +99,11 @@ ggplot(bpms_geral, aes(x = emocao, y = Media, group = 1)) +
 
 # Media dos BPMs durante os testes do tempo de reação por participante
 
-bpms <- dados %>% select(Sujeito = PARTICIPANTES, Condição = CONDICAO, POS = TRPOS, NEG = TRNEG, NEU = TRNEU, SD_POS = STDDEV_TRPOS, SD_NEG = STDDEV_TRNEG, SD_NEU = STDDEV_TRNEU) %>%
+trs <- dados %>% select(Sujeito = PARTICIPANTES, Condição = CONDICAO, POS = TRPOS, NEG = TRNEG, NEU = TRNEU, SD_POS = STDDEV_TRPOS, SD_NEG = STDDEV_TRNEG, SD_NEU = STDDEV_TRNEU) %>%
   pivot_longer(cols = c(POS,NEG,NEU), names_to = "Video", values_to = "TR") %>%
   mutate(SD = case_when(Video == "POS" ~ SD_POS, Video  == "NEG" ~ SD_NEG, Video == "NEU" ~ SD_NEU))
 
-ggplot(bpms, aes(x = Video, y = TR, group = Sujeito)) + 
+ggplot(trs, aes(x = Video, y = TR, group = Sujeito)) + 
   geom_line(aes(color = Sujeito), linewidth = 1) +
   geom_point(size = 2) + 
   geom_errorbar(aes(ymin = TR - SD, ymax = TR + SD), width = 0.2) +
@@ -132,6 +132,8 @@ ggplot(medias_bpm, aes (x = emocao, y = Media, group = factor(CONDICAO), color =
   geom_smooth(se = False, method = "loess") + 
   labs (title = "Médias de BPMs nos videos por Condicão", x = "Tipo de Estímulo", y = "BPM", color = "Condição") +
   theme_minimal(base_size = 13)
+
+# Medias dos BPMs nos Tempos de Reação com base nas condições
 
 medias_tr <- medias_por_condicao %>% select(CONDICAO, starts_with("MediaTR")) %>% pivot_longer(cols = starts_with("MediaTR"), names_to = "emocao", values_to = "Media") %>% mutate(emocao = case_when(emocao == "MediaTRPOS" ~ "Positivo", emocao == "MediaTRNEG" ~ "Negativo", emocao == "MediaTRNEU" ~ "Neutro"))
 
