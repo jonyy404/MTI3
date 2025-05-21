@@ -154,3 +154,13 @@ summary(anova_videos)
 
 anova_tr <- aov(TR ~ Condição * Video + Error(Sujeito/Video), data = trs)
 summary(anova_tr)
+
+# Import dos dados do questionário
+
+dadosq <- read.csv("C:/Users/Utilizador/Desktop/dadosq.csv", sep = ";")
+
+# Testes de correlação para verificar se os a opinião dos videos e os batimentos cardiacos estão relacionados
+
+cor.test(dados$VPOS, dadosq$VPOS)
+cor.test(dados$VNEG, dadosq$VNEG)
+cor.test(dados$VNEU, dadosq$VNEU)
