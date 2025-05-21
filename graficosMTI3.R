@@ -1,15 +1,11 @@
 # Import das librarys 
 
 library(tidyverse)
-library(readr)
-library(ggplot2)
-library(dplyr)
-library(tidyr)
 library(scales)
 
 # Import dos dados
 
-dados <- read.csv("C:/Users/jmrc2/Desktop/dadosecg.csv", sep = ";")
+dados <- read.csv("C:/Users/Utilizador/Desktop/dadosecg.csv", sep = ";")
 
 # Como tava a ter problemas por causad da coluna das condições e das ordens decidi adiciona-las manualmente
 
@@ -74,8 +70,8 @@ print(medias_gerais)
 # Media dos BPMs durante os vídeos por participante
 
 bpms <- dados %>% select(Sujeito = PARTICIPANTES, Condição = CONDICAO, POS = VPOS, NEG = VNEG, NEU = VNEU, SD_POS = STDDEV_VPOS, SD_NEG = STDDEV_VNEG, SD_NEU = STDDEV_VNEU) %>%
-                  pivot_longer(cols = c(POS,NEG,NEU), names_to = "Video", values_to = "BPM") %>%
-                  mutate(SD = case_when(Video == "POS" ~ SD_POS, Video  == "NEG" ~ SD_NEG, Video == "NEU" ~ SD_NEU))
+  pivot_longer(cols = c(POS,NEG,NEU), names_to = "Video", values_to = "BPM") %>%
+  mutate(SD = case_when(Video == "POS" ~ SD_POS, Video  == "NEG" ~ SD_NEG, Video == "NEU" ~ SD_NEU))
 
 ggplot(bpms, aes(x = Video, y = BPM, group = Sujeito)) + 
   geom_line(aes(color = Sujeito), linewidth = 1) +
@@ -159,8 +155,14 @@ summary(anova_tr)
 
 dadosq <- read.csv("C:/Users/Utilizador/Desktop/dadosq.csv", sep = ";")
 
-# Testes de correlação para verificar se os a opinião dos videos e os batimentos cardiacos estão relacionados
+# Testes de correlação entre os BPMs durante os videos e os dados do questionário
 
-cor.test(dados$VPOS, dadosq$VPOS)
-cor.test(dados$VNEG, dadosq$VNEG)
-cor.test(dados$VNEU, dadosq$VNEU)
+cor.test(dados$VPOS, dadosq$POS) # Em relação ao video da Alegria
+cor.test(dados$VNEG, dadosq$NEG) # Em relação ao video da Raiva
+cor.test(dados$VNEU, dadosq$NEU) # Em relação ao video Neutro
+
+# Testes de correlação entre os BPMs durante os Testes de Tempo de Reação e os dados do questionário
+
+cor.test(dados$TRPOS, dadosq$POS) # Em relação ao video da Alegria
+cor.test(dados$TRNEG, dadosq$NEG) # Em relação ao video da Raiva
+cor.test(dados$TRNEU, dadosq$NEU) # Em relação ao video Neutro
