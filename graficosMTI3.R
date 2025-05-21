@@ -14,8 +14,8 @@ dados <- read.csv("C:/Users/jmrc2/Desktop/dadosecg.csv", sep = ";")
 # Como tava a ter problemas por causad da coluna das condições e das ordens decidi adiciona-las manualmente
 
 participantes_condicao <- data.frame(
-  PARTICIPANTES = c("P1","P2","P3","P4","P5""P6","P7","P8","P9","P10","P11", "P12"),
-  CONDICAO = c(1,5,4,2,3,6,1,2,3,4,5,6)
+  PARTICIPANTES = c("P1","P2","P3","P4","P5","P6","P7","P8","P9","P10","P11", "P12"),
+  CONDICAO = c(1,5,4,2,3,6,1,2,3,4,5,6),
   ORDEM = c("pos_neg_neu","neu_pos_neg", "neg_neu_pos", "pos_neu_neg", "neg_pos_neu", "neu_neg_pos", "pos_neg_neu", "pos_neu_neg", "neg_pos_neu", "neg_neu_pos", "neu_pos_neg", "neu_neg_pos")
 )
 
@@ -142,3 +142,15 @@ ggplot(medias_tr, aes (x = emocao, y = Media, group = factor(CONDICAO), color = 
   geom_smooth(se = False, method = "loess") + 
   labs (title = "Médias de BPMs nos Tempos de Reação por Condicão", x = "Tipo de Estímulo", y = "BPM", color = "Condição") +
   theme_minimal(base_size = 13)
+
+# Testes ANOVA
+
+# ANOVA para os videos 
+
+anova_videos <- aov(BPM ~ Condição * Video + Error(Sujeito/Video), data = bpms)
+summary(anova_videos)
+
+# ANOVA para os Tempos de Reação
+
+anova_tr <- aov(TR ~ Condição * Video + Error(Sujeito/Video), data = trs)
+summary(anova_tr)
